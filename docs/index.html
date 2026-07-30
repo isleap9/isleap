@@ -3,11 +3,13 @@
   ============================================================
     personal site — "rice" style (hyprland/terminal aesthetic)
   ============================================================
-  >>> SET THIS ONCE <<<
-  Find  const GITHUB_USER  in the script and change "octocat"
-  to your username. Your avatar + repos load from it.
+  >>> THE ONLY LINE YOU NEED TO CHANGE <<<
+  Near the bottom, in the <script>, find:
+        const GITHUB_USER = "isleap9";
+  Change ONLY the text inside the quotes. Do NOT touch the
+  ${GITHUB_USER} spots in the code below it — those read this line.
 
-  Edit the pfetch info, name, quote, links: search for  EDIT .
+  Edit text (name, pfetch lines, quote): search for  EDIT .
   Default palette: change data-theme below to "mocha"|"lain"|"akari".
 
   PUBLISH (free): upload as index.html to neocities.org,
@@ -36,7 +38,7 @@
     background:var(--bg); color:var(--ink); min-height:100vh;
     font-family:ui-monospace,"JetBrains Mono","SF Mono","Cascadia Mono",Menlo,Consolas,"Courier New",monospace;
     font-size:13.5px; line-height:1.7; letter-spacing:0.2px;
-    padding-bottom:56px; /* room for the bar */
+    padding-bottom:56px;
     transition:background 0.5s, color 0.5s;
   }
   body::before{ content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
@@ -90,7 +92,7 @@
   /* ---------- WAYBAR ---------- */
   .bar{ position:fixed; left:0; right:0; bottom:0; z-index:50;
     display:flex; align-items:center; gap:8px; padding:7px 10px;
-    background:linear-gradient(0deg, var(--bg), var(--bg)); border-top:1px solid var(--line); }
+    background:var(--bg); border-top:1px solid var(--line); }
   .pill{ display:flex; align-items:center; gap:6px; font-size:12px; color:var(--ink);
     background:var(--bg2); border:1px solid var(--line); border-radius:7px; padding:4px 10px; white-space:nowrap; }
   .pill.nav{ cursor:pointer; color:var(--dim); text-decoration:none; }
@@ -119,7 +121,7 @@
     <!-- ============ PROFILE PANE (pfetch style) ============ -->
     <section class="pane" id="profile">
       <div class="pane-head">
-        <span class="ph-mark">▲</span> <span class="ph-user" id="pu">isleap9</span>
+        <span class="ph-mark">▲</span> <span class="ph-user">isleap9</span>
         <span class="ph-tilde">~</span> <span class="ph-sh">fish</span>
         <span class="ph-tilde">⏰ <span id="clk1">--:--</span></span>
         &nbsp; <span class="prompt">❯</span> <span class="ph-cmd">pfetch</span>
@@ -130,15 +132,15 @@
           <img class="avatar" id="avatar" alt="me">
           <div class="info">
             <!-- EDIT: your name -->
-            <div class="name-big"><b id="nm">isleap9</b><span class="under"></span></div>
+            <div class="name-big"><b>isleap9</b><span class="under"></span></div>
             <!-- EDIT: these lines are your "pfetch". Change freely. -->
             <div><span class="k">os</span><span class="sep">·</span> arch linux (btw)</div>
             <div><span class="k">editor</span><span class="sep">·</span> neovim</div>
             <div><span class="k">wm</span><span class="sep">·</span> hyprland</div>
             <div><span class="k">doing</span><span class="sep">·</span> making quiet things</div>
             <div><span class="k">links</span><span class="sep">·</span>
-              <a id="gh" href="https://github.com/isleap9">github</a> ·
-              <a href="pierluigisassanelli98@gmail.com">email</a></div>
+              <a id="gh" href="#">github</a> ·
+              <a href="mailto:pierluigisassanelli98@gmail.com">email</a></div>
           </div>
         </div>
       </div>
@@ -171,8 +173,8 @@
   <!-- ============ WAYBAR ============ -->
   <div class="bar">
     <span class="pill logo">△</span>
-    <a class="pill nav" href="https://github.com/isleap9">profile</a>
-    <a class="pill nav" href="https://github.com/isleap9/Akari-Tool">projects</a>
+    <a class="pill nav" href="#profile">profile</a>
+    <a class="pill nav" href="#projects">projects</a>
     <span class="spacer"></span>
     <span class="pill hide-sm"><span class="lbl">◆</span> <span id="hits">0</span> visits</span>
     <span class="pill themes" title="palette">
@@ -185,21 +187,22 @@
 
 <script>
   /* ======================================================
-     >>>>>  SET YOUR GITHUB USERNAME HERE  <<<<<
+     >>>>>  CHANGE ONLY THE TEXT IN QUOTES ON THIS LINE  <<<<<
+     Leave every ${GITHUB_USER} below exactly as it is.
      ====================================================== */
-  const GITHUB_USER = "octocat";   // EDIT: your GitHub username
+  const GITHUB_USER = "isleap9";
   const HOW_MANY   = 6;            // projects to show
   const HIDE_FORKS = true;
 
   function setTheme(t){ document.documentElement.setAttribute('data-theme', t); }
 
-  document.getElementById('avatar').src = `https://github.com/${isleap9}.png`;
-  document.getElementById('gh').href = `https://github.com/${isleap9}`;
+  document.getElementById('avatar').src = `https://github.com/${GITHUB_USER}.png`;
+  document.getElementById('gh').href = `https://github.com/${GITHUB_USER}`;
 
   async function loadRepos(){
     const box = document.getElementById('repos');
     try{
-      const res = await fetch(`https://api.github.com/users/${isleap9}/repos?sort=updated&per_page=100`);
+      const res = await fetch(`https://api.github.com/users/${GITHUB_USER}/repos?sort=updated&per_page=100`);
       if(!res.ok) throw new Error(res.status);
       let repos = await res.json();
       if(HIDE_FORKS) repos = repos.filter(r => !r.fork);
@@ -216,7 +219,7 @@
         </a>`).join('');
     }catch(err){
       box.innerHTML = `<div class="msg">couldn't reach github. everything's at
-        <a href="https://github.com/${isleap9}" target="_blank" rel="noopener">github.com/${GITHUB_USER}</a>.</div>`;
+        <a href="https://github.com/${GITHUB_USER}" target="_blank" rel="noopener">github.com/${GITHUB_USER}</a>.</div>`;
     }
   }
   function escapeHtml(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
@@ -234,9 +237,6 @@
 
   /* visit counter (decorative) */
   document.getElementById('hits').textContent = 700 + Math.floor(Math.random()*400);
-
-  /* fill name-driven bits */
-  document.getElementById('nm').textContent = document.getElementById('nm').textContent;
 </script>
 </body>
 </html>
