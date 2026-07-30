@@ -193,13 +193,13 @@
 
   function setTheme(t){ document.documentElement.setAttribute('data-theme', t); }
 
-  document.getElementById('avatar').src = `https://github.com/${GITHUB_USER}.png`;
-  document.getElementById('gh').href = `https://github.com/${GITHUB_USER}`;
+  document.getElementById('avatar').src = `https://github.com/${isleap9}.png`;
+  document.getElementById('gh').href = `https://github.com/${isleap9}`;
 
   async function loadRepos(){
     const box = document.getElementById('repos');
     try{
-      const res = await fetch(`https://api.github.com/users/${GITHUB_USER}/repos?sort=updated&per_page=100`);
+      const res = await fetch(`https://api.github.com/users/${isleap9}/repos?sort=updated&per_page=100`);
       if(!res.ok) throw new Error(res.status);
       let repos = await res.json();
       if(HIDE_FORKS) repos = repos.filter(r => !r.fork);
@@ -216,7 +216,7 @@
         </a>`).join('');
     }catch(err){
       box.innerHTML = `<div class="msg">couldn't reach github. everything's at
-        <a href="https://github.com/${GITHUB_USER}" target="_blank" rel="noopener">github.com/${GITHUB_USER}</a>.</div>`;
+        <a href="https://github.com/${isleap9}" target="_blank" rel="noopener">github.com/${GITHUB_USER}</a>.</div>`;
     }
   }
   function escapeHtml(s){ return String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
