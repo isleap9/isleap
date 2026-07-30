@@ -93,21 +93,69 @@
   .t-mocha{ background:#cba6f7; } .t-lain{ background:#e0a44a; } .t-akari{ background:#e0503f; }
   .clockpill .lbl{ color:var(--accent3); }
 
-  /* ---------- ROFI-STYLE LAUNCHER ---------- */
+  /* ---------- ROFI-STYLE APP LAUNCHER ---------- */
   .launcher{ position:fixed; inset:0; z-index:1000; display:none;
     align-items:flex-start; justify-content:center; padding:11vh 16px 16px;
     background:rgba(0,0,0,0.55); backdrop-filter:blur(3px); }
   .launcher.open{ display:flex; }
-  .rofi{ width:min(680px,94vw); background:var(--bg2); border:1px solid var(--accent);
+  .rofi{ width:min(560px,94vw); background:var(--bg2); border:1px solid var(--accent);
     border-radius:11px; box-shadow:0 0 44px var(--glow); overflow:hidden; }
-  .rofi-head{ display:flex; align-items:center; gap:8px; padding:11px 14px;
-    border-bottom:1px solid var(--line); font-size:13px; }
-  .rofi-head .p{ color:var(--accent3); } .rofi-head .q{ color:var(--ink); }
-  .rofi-head .esc{ margin-left:auto; color:var(--dim); font-size:11px; }
-  .rofi-body{ padding:14px; }
-  .video{ position:relative; width:100%; aspect-ratio:16/9; border-radius:8px;
-    overflow:hidden; border:1px solid var(--line); background:#000; }
-  .video iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+  .rofi-search{ display:flex; align-items:center; gap:9px; padding:12px 14px; border-bottom:1px solid var(--line); }
+  .rofi-search .p{ color:var(--accent3); }
+  .rofi-search input{ flex:1; background:none; border:none; outline:none; color:var(--ink); font:inherit; font-size:14px; }
+  .rofi-search input::placeholder{ color:var(--dim); }
+  .rofi-search .esc{ color:var(--dim); font-size:11px; border:1px solid var(--line); border-radius:5px; padding:1px 6px; }
+  .rofi-list{ list-style:none; margin:0; padding:6px; max-height:46vh; overflow:auto; }
+  .rofi-list li{ display:flex; align-items:center; gap:11px; padding:9px 11px; border-radius:7px; cursor:pointer; font-size:13.5px; color:var(--ink); }
+  .rofi-list li .ic{ color:var(--accent2); width:16px; text-align:center; }
+  .rofi-list li .nm{ flex:1; }
+  .rofi-list li .hint{ color:var(--dim); font-size:11px; }
+  .rofi-list li.sel{ background:var(--accent); color:var(--bg); }
+  .rofi-list li.sel .ic, .rofi-list li.sel .hint{ color:var(--bg); }
+  .rofi-list .empty{ padding:14px 11px; color:var(--dim); font-size:13px; cursor:default; }
+  .rofi-video{ display:none; padding:14px; }
+  .rofi-video.show{ display:block; }
+  .rofi-video .frame{ position:relative; width:100%; aspect-ratio:16/9; border-radius:8px; overflow:hidden; border:1px solid var(--line); background:#000; }
+  .rofi-video iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+
+  /* ---------- MINI APPS (inside the launcher) ---------- */
+  .rofi-app{ display:none; }
+  .rofi-app.show{ display:block; }
+  .app-head{ display:flex; align-items:center; gap:10px; padding:9px 12px; border-bottom:1px solid var(--line); }
+  .app-back{ font:inherit; font-size:12px; color:var(--dim); background:var(--bg); border:1px solid var(--line); border-radius:6px; padding:3px 9px; cursor:pointer; }
+  .app-back:hover{ color:var(--accent); border-color:var(--accent); }
+  .app-title{ font-size:13px; color:var(--accent); letter-spacing:0.5px; }
+  .app-body{ padding:14px; max-height:56vh; overflow:auto; }
+  .app-body .frame{ position:relative; width:100%; aspect-ratio:16/9; border-radius:8px; overflow:hidden; border:1px solid var(--line); background:#000; }
+  .app-body .frame iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+
+  .calc-disp{ width:100%; text-align:right; font-size:22px; color:var(--ink); background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:12px 14px; margin-bottom:10px; min-height:26px; word-break:break-all; }
+  .calc-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+  .calc-grid button{ font:inherit; font-size:15px; padding:12px 0; color:var(--ink); background:var(--bg2); border:1px solid var(--line); border-radius:8px; cursor:pointer; }
+  .calc-grid button:hover{ border-color:var(--accent); color:var(--accent); }
+  .calc-grid .op{ color:var(--accent2); }
+  .calc-grid .eq{ background:var(--accent); color:var(--bg); border-color:var(--accent); grid-column:span 2; }
+
+  .note-area{ width:100%; min-height:200px; resize:vertical; font:inherit; font-size:13px; line-height:1.6; color:var(--ink); background:var(--bg); border:1px solid var(--line); border-radius:8px; padding:12px; outline:none; }
+  .note-area:focus{ border-color:var(--accent); }
+  .note-status{ margin-top:6px; font-size:11px; color:var(--dim); }
+
+  .term{ font-size:13px; }
+  .term-out{ white-space:pre-wrap; color:var(--ink); min-height:120px; }
+  .term-out .c2{ color:var(--accent2); } .term-out .c3{ color:var(--accent3); } .term-out .dimr{ color:var(--dim); }
+  .term-line{ display:flex; gap:8px; align-items:center; margin-top:6px; }
+  .term-line .p{ color:var(--accent3); }
+  .term-line input{ flex:1; background:none; border:none; outline:none; color:var(--ink); font:inherit; font-size:13px; }
+
+  .clock-app{ text-align:center; padding:22px 0; }
+  .clock-app .t{ font-size:44px; letter-spacing:3px; color:var(--accent); }
+  .clock-app .d{ font-size:13px; color:var(--dim); margin-top:8px; letter-spacing:1px; }
+
+  .trash-list{ list-style:none; margin:0; padding:0; }
+  .trash-list li{ display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:7px; cursor:pointer; font-size:13px; color:var(--ink); }
+  .trash-list li:hover{ background:var(--bg); }
+  .trash-list li .ic{ color:var(--dim); }
+  .trash-list .note{ color:var(--dim); font-size:11px; margin-left:auto; }
 
   @media (max-width:560px){
     .bar{ flex-wrap:wrap; }
@@ -212,14 +260,22 @@
     <span class="pill clockpill"><span class="lbl">⏰</span> <span id="clk2">--:--:--</span></span>
   </div>
 
-  <!-- ============ ROFI LAUNCHER (opens when you click the arch logo) ============ -->
+  <!-- ============ ROFI APP LAUNCHER (click the arch logo) ============ -->
   <div class="launcher" id="launcher">
     <div class="rofi" role="dialog" aria-modal="true">
-      <div class="rofi-head">
-        <span class="p">❯</span> <span class="q">mpv ~/videos/secret.mp4</span>
-        <span class="esc">esc to close</span>
+      <div class="rofi-search" id="rofiSearch">
+        <span class="p">❯</span>
+        <input id="rofiInput" type="text" placeholder="search apps…" autocomplete="off" spellcheck="false" aria-label="search apps">
+        <span class="esc">esc</span>
       </div>
-      <div class="rofi-body"><div class="video" id="video"></div></div>
+      <ul class="rofi-list" id="rofiList"></ul>
+      <div class="rofi-app" id="rofiApp">
+        <div class="app-head">
+          <button class="app-back" id="appBack">‹ apps</button>
+          <span class="app-title" id="appTitle"></span>
+        </div>
+        <div class="app-body" id="appBody"></div>
+      </div>
     </div>
   </div>
 
@@ -247,25 +303,222 @@
     });
   });
 
-  /* ---------- ARCH LOGO -> ROFI LAUNCHER + EMBEDDED VIDEO ---------- */
-  const VIDEO_ID = "FtGAgfaXuTA";   // EDIT: YouTube video id (the part after "v=" in the url)
-  const launcher = document.getElementById('launcher');
-  const videoBox = document.getElementById('video');
+  /* ---------- ARCH LOGO -> ROFI APP LAUNCHER + WORKING MINI APPS ---------- */
+  const VIDEO_ID = "dQw4w9WgXcQ";   // EDIT: YouTube video id (the part after "v=" in the url)
+  const GH = GITHUB_USER;
 
+  const launcher = document.getElementById('launcher');
+  const searchEl = document.getElementById('rofiSearch');
+  const input    = document.getElementById('rofiInput');
+  const listEl   = document.getElementById('rofiList');
+  const appEl    = document.getElementById('rofiApp');
+  const appTitle = document.getElementById('appTitle');
+  const appBody  = document.getElementById('appBody');
+  const appBack  = document.getElementById('appBack');
+
+  function goto(sel){
+    var el = document.querySelector(sel); if(!el) return;
+    el.scrollIntoView({ behavior:'smooth', block:'start' });
+    el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
+  }
+
+  /* ---- the apps ---- */
+  function calcApp(body){
+    body.innerHTML =
+      '<div class="calc-disp" id="cd">0</div><div class="calc-grid">' +
+      '<button data-k="C">C</button><button data-k="(">(</button><button data-k=")">)</button><button data-k="/" class="op">÷</button>' +
+      '<button data-k="7">7</button><button data-k="8">8</button><button data-k="9">9</button><button data-k="*" class="op">×</button>' +
+      '<button data-k="4">4</button><button data-k="5">5</button><button data-k="6">6</button><button data-k="-" class="op">−</button>' +
+      '<button data-k="1">1</button><button data-k="2">2</button><button data-k="3">3</button><button data-k="+" class="op">+</button>' +
+      '<button data-k="0">0</button><button data-k=".">.</button><button data-k="=" class="eq">=</button></div>';
+    var disp = body.querySelector('#cd');
+    var expr = '';
+    function show(){ disp.textContent = expr === '' ? '0' : expr.replace(/\*/g,'×').replace(/\//g,'÷').replace(/-/g,'−'); }
+    function press(k){
+      if(k === 'C'){ expr = ''; }
+      else if(k === '='){
+        try{
+          if(/^[0-9+\-*/().\s]+$/.test(expr) && expr.trim() !== ''){
+            var r = Function('return (' + expr + ')')();
+            expr = (r === undefined || r === null || !isFinite(r)) ? 'error' : String(+parseFloat(Number(r).toFixed(10)));
+          }
+        }catch(e){ expr = 'error'; }
+      }
+      else { if(expr === 'error') expr = ''; expr += k; }
+      show();
+    }
+    body.querySelectorAll('.calc-grid button').forEach(function(b){
+      b.addEventListener('click', function(){ press(b.getAttribute('data-k')); });
+    });
+    function onKey(e){
+      if(appEl.classList.contains('show') === false) return;
+      var k = e.key;
+      if(k.length === 1 && /[0-9+\-*/().]/.test(k)){ press(k); e.preventDefault(); }
+      else if(k === 'Enter'){ press('='); e.preventDefault(); }
+      else if(k === 'Backspace'){ if(expr === 'error') expr = ''; expr = expr.slice(0,-1); show(); e.preventDefault(); }
+    }
+    document.addEventListener('keydown', onKey);
+    show();
+    return function(){ document.removeEventListener('keydown', onKey); };
+  }
+
+  function notepadApp(body){
+    body.innerHTML = '<textarea class="note-area" placeholder="type anything… it saves automatically"></textarea><div class="note-status" id="ns">·</div>';
+    var ta = body.querySelector('.note-area'), ns = body.querySelector('#ns');
+    var saved = ''; try{ saved = localStorage.getItem('rice_notepad') || ''; }catch(e){}
+    ta.value = saved; ns.textContent = saved ? 'loaded your note' : 'empty';
+    var t;
+    ta.addEventListener('input', function(){
+      clearTimeout(t); ns.textContent = 'saving…';
+      t = setTimeout(function(){
+        try{ localStorage.setItem('rice_notepad', ta.value); ns.textContent = 'saved ✓'; }
+        catch(e){ ns.textContent = '(saving works once the site is hosted)'; }
+      }, 300);
+    });
+    setTimeout(function(){ ta.focus(); }, 30);
+    return null;
+  }
+
+  function terminalApp(body){
+    body.innerHTML = '<div class="term"><div class="term-out" id="to"></div><div class="term-line"><span class="p">❯</span><input id="ti" autocomplete="off" spellcheck="false" aria-label="terminal"></div></div>';
+    var out = body.querySelector('#to'), inp = body.querySelector('#ti');
+    function print(html){ out.innerHTML += html + '\n'; out.scrollTop = out.scrollHeight; }
+    print('<span class="dimr">type <span class="c2">help</span> for commands</span>');
+    var cmds = {
+      help:function(){ return 'commands: help, whoami, date, echo, ls, neofetch, clear'; },
+      whoami:function(){ return 'isleap9'; },
+      date:function(){ return new Date().toString(); },
+      ls:function(){ return 'projects/  readme.txt  quote.txt'; },
+      neofetch:function(){ return '<span class="c2">isleap9@arch</span>\nos    arch linux (btw)\nwm    hyprland\nsh    fish'; }
+    };
+    function run(line){
+      var c = line.trim().split(/\s+/)[0];
+      var rest = line.trim().slice(c.length).trim();
+      print('<span class="c3">❯</span> ' + escapeHtml(line));
+      if(c === ''){ /* nothing */ }
+      else if(c === 'clear'){ out.innerHTML = ''; }
+      else if(c === 'echo'){ print(escapeHtml(rest)); }
+      else if(c === 'sudo' || c === 'secret'){ print('<span class="c3">nice try ;)</span>'); }
+      else if(cmds[c]){ print(cmds[c]()); }
+      else { print('command not found: ' + escapeHtml(c)); }
+    }
+    inp.addEventListener('keydown', function(e){ if(e.key === 'Enter'){ run(inp.value); inp.value = ''; } });
+    setTimeout(function(){ inp.focus(); }, 30);
+    return null;
+  }
+
+  function clockApp(body){
+    body.innerHTML = '<div class="clock-app"><div class="t" id="ct">--:--:--</div><div class="d" id="cdt"></div></div>';
+    var tt = body.querySelector('#ct'), dd = body.querySelector('#cdt');
+    function tick(){ var n = new Date(); tt.textContent = pad(n.getHours())+':'+pad(n.getMinutes())+':'+pad(n.getSeconds()); dd.textContent = n.toDateString(); }
+    tick(); var iv = setInterval(tick, 1000);
+    return function(){ clearInterval(iv); };
+  }
+
+  /* the trash — nobody checks the trash. one file plays the video. */
+  function trashApp(body){
+    var files = [
+      { nm:'report_final_v2.pdf', note:'0 bytes' },
+      { nm:'screenshot_2019.png', note:'corrupted' },
+      { nm:'notes.txt.bak',       note:'empty' },
+      { nm:'recording_002.mp4',   note:'restore', egg:true }
+    ];
+    body.innerHTML = '<ul class="trash-list">' + files.map(function(f,i){
+      return '<li data-i="'+i+'"><span class="ic">▪</span><span>'+f.nm+'</span><span class="note">'+f.note+'</span></li>';
+    }).join('') + '</ul>';
+    body.querySelectorAll('.trash-list li').forEach(function(li){
+      li.addEventListener('click', function(){
+        var f = files[+li.getAttribute('data-i')];
+        if(f.egg){
+          body.innerHTML = '<div class="frame"><iframe src="https://www.youtube.com/embed/'+VIDEO_ID+
+            '?autoplay=1&rel=0&playsinline=1" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe></div>';
+        } else {
+          var n = body.querySelector('#tmsg');
+          if(!n){ n = document.createElement('div'); n.id = 'tmsg'; n.className = 'note-status'; n.style.marginTop = '10px'; body.appendChild(n); }
+          n.textContent = 'cannot open ' + f.nm + ' — file is damaged.';
+        }
+      });
+    });
+    return null;
+  }
+
+  const APPS = [
+    { ic:'▦', nm:'calculator',    keys:'math calc',            open:calcApp },
+    { ic:'✎', nm:'notepad',       keys:'notes text write',     open:notepadApp },
+    { ic:'❯', nm:'terminal',      keys:'shell fish console',   open:terminalApp },
+    { ic:'◷', nm:'clock',         keys:'time date',            open:clockApp },
+    { ic:'▤', nm:'trash',         keys:'bin deleted recycle',  open:trashApp },
+    { ic:'★', nm:'github',        keys:'git code repos', run:function(){ window.open('https://github.com/'+GH,'_blank'); closeLauncher(); } },
+    { ic:'✉', nm:'mail',          keys:'email contact',  run:function(){ location.href='mailto:pierluigisassanelli98@gmail.com'; } },
+    { ic:'▸', nm:'projects',      keys:'work repos',     run:function(){ closeLauncher(); goto('#projects'); } },
+    { ic:'◆', nm:'theme · mocha', keys:'palette color',  run:function(){ setTheme('mocha'); } },
+    { ic:'◆', nm:'theme · lain',  keys:'palette color',  run:function(){ setTheme('lain'); } },
+    { ic:'◆', nm:'theme · akari', keys:'palette color',  run:function(){ setTheme('akari'); } }
+  ];
+
+  let view = [], sel = 0, currentCleanup = null;
+
+  function matches(a, q){ return (a.nm + ' ' + a.keys).toLowerCase().includes(q); }
+  function render(){
+    var q = input.value.trim().toLowerCase();
+    view = APPS.filter(function(a){ return q === '' || matches(a, q); });
+    if(sel >= view.length) sel = view.length - 1;
+    if(sel < 0) sel = 0;
+    if(!view.length){ listEl.innerHTML = '<li class="empty">no results</li>'; return; }
+    listEl.innerHTML = view.map(function(a,i){
+      return '<li data-i="'+i+'" class="'+(i===sel?'sel':'')+'"><span class="ic">'+a.ic+'</span><span class="nm">'+a.nm+'</span><span class="hint">↵</span></li>';
+    }).join('');
+  }
+  function activate(){ var a = view[sel]; if(!a) return; if(a.open) openApp(a); else if(a.run) a.run(); }
+
+  function openApp(a){
+    searchEl.style.display = 'none'; listEl.style.display = 'none';
+    appEl.classList.add('show'); appTitle.textContent = a.nm; appBody.innerHTML = '';
+    currentCleanup = a.open(appBody) || null;
+  }
+  function backToList(){
+    if(currentCleanup){ try{ currentCleanup(); }catch(e){} currentCleanup = null; }
+    appEl.classList.remove('show'); appBody.innerHTML = '';
+    searchEl.style.display = ''; listEl.style.display = '';
+    render(); setTimeout(function(){ input.focus(); }, 20);
+  }
   function openLauncher(){
-    // building the iframe on click (a user gesture) gives autoplay the best chance
-    videoBox.innerHTML = '<iframe src="https://www.youtube.com/embed/' + VIDEO_ID + 
-      '?autoplay=1&rel=0&playsinline=1" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
     launcher.classList.add('open');
+    if(currentCleanup){ try{ currentCleanup(); }catch(e){} currentCleanup = null; }
+    appEl.classList.remove('show'); appBody.innerHTML = '';
+    searchEl.style.display = ''; listEl.style.display = '';
+    input.value = ''; sel = 0; render();
+    setTimeout(function(){ input.focus(); }, 30);
   }
   function closeLauncher(){
     launcher.classList.remove('open');
-    videoBox.innerHTML = '';   // clearing it stops the audio/video
+    if(currentCleanup){ try{ currentCleanup(); }catch(e){} currentCleanup = null; }
+    appEl.classList.remove('show'); appBody.innerHTML = '';
+    searchEl.style.display = ''; listEl.style.display = '';
   }
 
   document.querySelector('.logo').addEventListener('click', openLauncher);
+  appBack.addEventListener('click', backToList);
   launcher.addEventListener('click', function(e){ if(e.target === launcher) closeLauncher(); });
-  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeLauncher(); });
+  input.addEventListener('input', function(){ sel = 0; render(); });
+  input.addEventListener('keydown', function(e){
+    if(e.key === 'ArrowDown'){ e.preventDefault(); sel = Math.min(sel+1, view.length-1); render(); }
+    else if(e.key === 'ArrowUp'){ e.preventDefault(); sel = Math.max(sel-1, 0); render(); }
+    else if(e.key === 'Enter'){ e.preventDefault(); activate(); }
+  });
+  listEl.addEventListener('click', function(e){
+    var li = e.target.closest('li[data-i]'); if(!li) return;
+    sel = parseInt(li.getAttribute('data-i'),10); activate();
+  });
+  listEl.addEventListener('mousemove', function(e){
+    var li = e.target.closest('li[data-i]'); if(!li) return;
+    var i = parseInt(li.getAttribute('data-i'),10);
+    if(i !== sel){ sel = i; render(); }
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key !== 'Escape' || !launcher.classList.contains('open')) return;
+    if(appEl.classList.contains('show')) backToList(); else closeLauncher();
+  });
 
   document.getElementById('avatar').src = `https://github.com/${GITHUB_USER}.png`;
   document.getElementById('gh').href = `https://github.com/${GITHUB_USER}`;
