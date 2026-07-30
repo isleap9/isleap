@@ -16,6 +16,7 @@
 
   *{ box-sizing:border-box; }
   html,body{ margin:0; }
+  html{ scroll-behavior:smooth; }
   body{
     background:var(--bg); color:var(--ink); min-height:100vh;
     font-family:ui-monospace,"JetBrains Mono","SF Mono","Cascadia Mono",Menlo,Consolas,"Courier New",monospace;
@@ -39,6 +40,8 @@
   .ph-sh{ color:var(--accent2); } .ph-cmd{ color:var(--ink); }
   .pane-body{ padding:16px 18px; }
   .prompt{ color:var(--accent3); }
+  .pane.flash{ animation:flash 1s ease; }
+  @keyframes flash{ 0%{ box-shadow:0 0 0 2px var(--accent), 0 0 28px var(--glow); } 100%{ box-shadow:0 0 22px var(--glow), inset 0 0 0 1px rgba(0,0,0,0.3); } }
 
   /* ---------- PROFILE / pfetch ---------- */
   .fetch{ display:flex; gap:20px; align-items:center; flex-wrap:wrap; }
@@ -80,7 +83,9 @@
   .pill.nav{ cursor:pointer; color:var(--dim); text-decoration:none; }
   .pill.nav:hover{ color:var(--accent); border-color:var(--accent); text-decoration:none; }
   .pill .lbl{ color:var(--accent2); }
-  .logo{ color:var(--accent); font-weight:700; }
+  .logo{ color:var(--accent); padding:4px 12px; cursor:pointer; }
+  .logo:hover{ border-color:var(--accent); box-shadow:0 0 12px var(--glow); }
+  .logo svg{ display:block; }
   .spacer{ flex:1; }
   .themes{ display:flex; gap:6px; align-items:center; }
   .themes button{ width:14px; height:14px; border-radius:50%; border:1px solid var(--dim); cursor:pointer; padding:0; }
@@ -88,11 +93,27 @@
   .t-mocha{ background:#cba6f7; } .t-lain{ background:#e0a44a; } .t-akari{ background:#e0503f; }
   .clockpill .lbl{ color:var(--accent3); }
 
+  /* ---------- ROFI-STYLE LAUNCHER ---------- */
+  .launcher{ position:fixed; inset:0; z-index:1000; display:none;
+    align-items:flex-start; justify-content:center; padding:11vh 16px 16px;
+    background:rgba(0,0,0,0.55); backdrop-filter:blur(3px); }
+  .launcher.open{ display:flex; }
+  .rofi{ width:min(680px,94vw); background:var(--bg2); border:1px solid var(--accent);
+    border-radius:11px; box-shadow:0 0 44px var(--glow); overflow:hidden; }
+  .rofi-head{ display:flex; align-items:center; gap:8px; padding:11px 14px;
+    border-bottom:1px solid var(--line); font-size:13px; }
+  .rofi-head .p{ color:var(--accent3); } .rofi-head .q{ color:var(--ink); }
+  .rofi-head .esc{ margin-left:auto; color:var(--dim); font-size:11px; }
+  .rofi-body{ padding:14px; }
+  .video{ position:relative; width:100%; aspect-ratio:16/9; border-radius:8px;
+    overflow:hidden; border:1px solid var(--line); background:#000; }
+  .video iframe{ position:absolute; inset:0; width:100%; height:100%; border:0; }
+
   @media (max-width:560px){
     .bar{ flex-wrap:wrap; }
     .hide-sm{ display:none; }
   }
-  @media (prefers-reduced-motion:reduce){ .under{ animation:none; } body{ transition:none; } .repo:hover{ transform:none; } }
+  @media (prefers-reduced-motion:reduce){ body{ transition:none; } .repo:hover{ transform:none; } }
 </style>
 </head>
 
@@ -176,7 +197,9 @@
 
   <!-- ============ WAYBAR ============ -->
   <div class="bar">
-    <span class="pill logo">△</span>
+    <span class="pill logo" title="arch linux">
+      <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-label="arch linux"><path d="M12 2 Q14.8 12 20 22 L14 22 Q12.7 17.6 12 15.2 Q11.3 17.6 10 22 L4 22 Q9.2 12 12 2 Z"/></svg>
+    </span>
     <a class="pill nav" href="#profile">profile</a>
     <a class="pill nav" href="#projects">projects</a>
     <span class="spacer"></span>
@@ -189,6 +212,17 @@
     <span class="pill clockpill"><span class="lbl">⏰</span> <span id="clk2">--:--:--</span></span>
   </div>
 
+  <!-- ============ ROFI LAUNCHER (opens when you click the arch logo) ============ -->
+  <div class="launcher" id="launcher">
+    <div class="rofi" role="dialog" aria-modal="true">
+      <div class="rofi-head">
+        <span class="p">❯</span> <span class="q">mpv ~/videos/secret.mp4</span>
+        <span class="esc">esc to close</span>
+      </div>
+      <div class="rofi-body"><div class="video" id="video"></div></div>
+    </div>
+  </div>
+
 <script>
   /* ======================================================
      >>>>>  CHANGE ONLY THE TEXT IN QUOTES ON THIS LINE  <<<<<
@@ -199,6 +233,39 @@
   const HIDE_FORKS = true;
 
   function setTheme(t){ document.documentElement.setAttribute('data-theme', t); }
+
+  /* nav pills: smooth-scroll to the section and flash it so the click is visible */
+  document.querySelectorAll('.pill.nav').forEach(function(a){
+    a.addEventListener('click', function(e){
+      var id = a.getAttribute('href');
+      if(!id || id.charAt(0) !== '#') return;
+      var el = document.querySelector(id);
+      if(!el) return;
+      e.preventDefault();
+      el.scrollIntoView({ behavior:'smooth', block:'start' });
+      el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
+    });
+  });
+
+  /* ---------- ARCH LOGO -> ROFI LAUNCHER + EMBEDDED VIDEO ---------- */
+  const VIDEO_ID = "FtGAgfaXuTA";   // EDIT: YouTube video id (the part after "v=" in the url)
+  const launcher = document.getElementById('launcher');
+  const videoBox = document.getElementById('video');
+
+  function openLauncher(){
+    // building the iframe on click (a user gesture) gives autoplay the best chance
+    videoBox.innerHTML = '<iframe src="https://www.youtube.com/embed/' + VIDEO_ID + 
+      '?autoplay=1&rel=0&playsinline=1" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+    launcher.classList.add('open');
+  }
+  function closeLauncher(){
+    launcher.classList.remove('open');
+    videoBox.innerHTML = '';   // clearing it stops the audio/video
+  }
+
+  document.querySelector('.logo').addEventListener('click', openLauncher);
+  launcher.addEventListener('click', function(e){ if(e.target === launcher) closeLauncher(); });
+  document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeLauncher(); });
 
   document.getElementById('avatar').src = `https://github.com/${GITHUB_USER}.png`;
   document.getElementById('gh').href = `https://github.com/${GITHUB_USER}`;
